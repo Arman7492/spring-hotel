@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+<h1>Admin Panel</h1>
+
+<h2>Pending Reservations</h2>
+<ul id="pendingReservations"></ul>
+
+<script>
+    async function loadPendingReservations() {
+            const response = await fetch("/managers/orders/pending");
+        const orders = await response.json();
+
+        const reservationList = document.getElementById("pendingReservations");
+        reservationList.innerHTML = "";
+
+        orders.forEach(order => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+            Room Class: ${order.roomClass}, Client ID: ${order.clientId},
+            Start Date: ${order.startDate}, End Date: ${order.endDate}
+            <button onclick="updateStatus(${order.id}, 'CONFIRMED')">Confirm</button>
+            <button onclick="updateStatus(${order.id}, 'REJECTED')">Reject</button>
+        `;
+            reservationList.appendChild(li);
+        });
+    }
+
+    async function updateStatus(orderId, status) {
+        const response = await fetch(`/managers/orders/${orderId}/status`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status })
+        });
+
+        if (response.ok) {
+            alert("Order status updated!");
+            loadPendingReservations();
+        } else {
+            alert("Failed to update order status.");
+        }
+    }
+
+    loadPendingReservations();
+</script>
+</body>
+</html>

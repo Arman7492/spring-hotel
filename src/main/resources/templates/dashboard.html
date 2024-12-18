@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h1>Welcome to the Hotel Management Dashboard</h1>
+<p>Hello, <strong th:text="${username}"></strong></p>
+
+<div>
+    <h2>Your Reservations</h2>
+    <ul id="reservations"></ul>
+</div>
+
+<div>
+    <h2>Create a Reservation</h2>
+    <form method="post" action="/orders">
+        <label for="roomClass">Room Class:</label>
+        <select id="roomClass" name="roomClass">
+            <option value="LUX">Lux</option>
+            <option value="COMFORT">Comfort</option>
+            <option value="ECONOM">Econom</option>
+        </select><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+<script src="/templates/js/dashboard.js"></script>
+<script>
+    async function loadReservations() {
+        const response = await fetch("/orders");
+        const reservations = await response.json();
+
+        const reservationList = document.getElementById("reservations");
+        reservationList.innerHTML = "";
+
+        reservations.forEach(order => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+            Room Class: ${order.roomClass}, Status: ${order.status},
+            Total Price: $${order.totalPrice}
+            ${order.status === 'CONFIRMED' ? '<button onclick="payOrder(' + order.id + ')">Pay</button>' : ''}
+        `;
+            reservationList.appendChild(li);
+        });
+    }
+
+    async function payOrder(orderId) {
+        const response = await fetch(`/orders/${orderId}/pay`, {
+            method: "POST"
+        });
+
+        if (response.ok) {
+            alert("Payment successful!");
+            loadReservations();
+        } else {
+            alert("Payment failed.");
+        }
+    }
+
+    loadReservations();
+</script>
+</body>
+</html>

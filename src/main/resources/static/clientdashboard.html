@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h1>Hotel Reservation</h1>
+
+<h2>Make a Reservation</h2>
+<form id="reservationForm">
+    <label for="roomClass">Room Class:</label>
+    <select id="roomClass" name="roomClass">
+        <option value="LUX">Lux</option>
+        <option value="COMFORT">Comfort</option>
+        <option value="ECONOM">Econom</option>
+    </select><br>
+
+    <label for="capacity">Number of Places:</label>
+    <input type="number" id="capacity" name="capacity" required><br>
+
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" name="startDate" required><br>
+
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" name="endDate" required><br>
+
+    <button type="submit">Submit Reservation</button>
+</form>
+
+<h2>Your Reservations</h2>
+<ul id="reservations"></ul>
+
+<script>
+    document.getElementById("reservationForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const reservationData = {
+            roomClass: document.getElementById("roomClass").value,
+            capacity: document.getElementById("capacity").value,
+            startDate: document.getElementById("startDate").value,
+            endDate: document.getElementById("endDate").value
+        };
+
+        // Send reservation to server
+        const response = await fetch("/orders", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(reservationData)
+        });
+
+        if (response.ok) {
+            alert("Reservation submitted successfully!");
+            loadReservations();
+        } else {
+            alert("Failed to submit reservation.");
+        }
+    });
+
+    async function loadReservations() {
+        const response = await fetch("/orders");
+        const reservations = await response.json();
+
+        const reservationList = document.getElementById("reservations");
+        reservationList.innerHTML = "";
+
+        reservations.forEach(order => {
+            const li = document.createElement("li");
+            li.textContent = `Room Class: ${order.roomClass}, Status: ${order.status}, Total: ${order.totalPrice}`;
+            reservationList.appendChild(li);
+        });
+    }
+
+    // Load reservations on page load
+    loadReservations();
+</script>
+</body>
+</html>
