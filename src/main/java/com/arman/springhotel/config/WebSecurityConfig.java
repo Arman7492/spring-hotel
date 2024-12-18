@@ -18,32 +18,32 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Отключаем CSRF для упрощения
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/home", "/css/**", "/js/**").permitAll() // Публичные пути
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // Доступ только для админа
-                        .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
+                        .requestMatchers("/", "/home", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login").permitAll() // Кастомная страница входа
-                        .defaultSuccessUrl("/dashboard", true) // Перенаправление после успешного входа
+                        .loginPage("/login").permitAll()
+                        .defaultSuccessUrl("/dashboard", true)
                 )
-                .logout(logout -> logout.permitAll()); // Позволяем выход всем
+                .logout(logout -> logout.permitAll());
         return http.build();
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
-        // Создаем двух пользователей: admin и client
+
         UserDetails client = User.builder()
                 .username("client")
-                .password("{noop}123") // Пароль без шифрования
+                .password("{noop}123")
                 .roles("CLIENT")
                 .build();
 
         UserDetails admin = User.builder()
                 .username("admin")
-                .password("{noop}admin123") // Пароль без шифрования
+                .password("{noop}admin123")
                 .roles("ADMIN")
                 .build();
 

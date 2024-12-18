@@ -43,7 +43,6 @@ public class RoomController {
             return ResponseEntity.notFound().build();
         }
 
-        // Используем сеттеры для обновления значений
         room.setCapacity(roomDetails.getCapacity());
         room.setRoomClass(roomDetails.getRoomClass());
         room.setAvailable(roomDetails.isAvailable());

@@ -21,7 +21,7 @@ public class ManagerService {
     }
 
     public Manager createOrUpdateManager(Manager manager) {
-        // Используем сеттеры
+
         Manager updatedManager = new Manager();
         updatedManager.setId(manager.getId());
         updatedManager.setName(manager.getName());

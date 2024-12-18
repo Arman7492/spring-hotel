@@ -16,7 +16,6 @@ public class Room {
     private boolean isAvailable;
     private double pricePerNight;
 
-    // Геттеры и сеттеры
     public int getId() {
         return id;
     }

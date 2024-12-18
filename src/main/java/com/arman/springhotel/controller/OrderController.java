@@ -62,7 +62,6 @@ public class OrderController {
             return ResponseEntity.notFound().build();
         }
 
-        // Используем сеттеры для обновления значений
         order.setClientId(orderDetails.getClientId());
         order.setRoomId(orderDetails.getRoomId());
         order.setStartDate(orderDetails.getStartDate());

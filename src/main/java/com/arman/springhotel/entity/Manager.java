@@ -19,7 +19,6 @@ public class Manager {
     @Column(nullable = false)
     private String phoneNumber;
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }

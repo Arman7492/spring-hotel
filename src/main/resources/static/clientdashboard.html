@@ -44,7 +44,6 @@
             endDate: document.getElementById("endDate").value
         };
 
-        // Send reservation to server
         const response = await fetch("/orders", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -73,7 +72,6 @@
         });
     }
 
-    // Load reservations on page load
     loadReservations();
 </script>
 </body>

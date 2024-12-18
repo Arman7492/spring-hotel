@@ -17,7 +17,6 @@ public class Order {
     private double totalPrice;
     private String status; // Pending, Confirmed, Rejected
 
-    // Геттеры и сеттеры
     public int getId() {
         return id;
     }

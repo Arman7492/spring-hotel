@@ -35,7 +35,6 @@ public class OrderService {
         }
     }
 
-    // Новый метод для поиска заказов по статусу
     public List<Order> findByStatus(String status) {
         return orderRepository.findByStatus(status);
     }
